@@ -1,28 +1,24 @@
+import { useState, useEffect } from "react";
 import { Button } from "../../shared/components/Button/Button";
 import { Card } from "../../shared/components/Card/Card";
+import { useNavigate } from "react-router";
 import "./HomePage.css";
-
-const features = [
-  {
-    image:
-      "https://cdn.stocksnap.io/img-thumbs/280h/landscape-green_8SHYNROZFF.jpg",
-    text: "Rent your own piece of farmland and watch your vegetables grow.",
-  },
-  {
-    image:
-      "https://cdn.stocksnap.io/img-thumbs/280h/landscape-green_8SHYNROZFF.jpg",
-    text: "Enjoy, year after year, the wonders of nature with your rented vegetable farmland (60 sqm / 30 sqm).",
-  },
-  {
-    image:
-      "https://cdn.stocksnap.io/img-thumbs/280h/landscape-green_8SHYNROZFF.jpg",
-    text: "Grow your own piece of land, from planting seeds in the lush soil to harvesting your own vegetables.",
-  },
-];
+import { useGetFieldsQuery } from "../../modules/fields/api/fieldsApi";
 
 export default function HomePage() {
+  const { data: fields = [], isLoading, isError } = useGetFieldsQuery();
+  const navigate = useNavigate();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Failed to load fields</div>;
+  }
+
   return (
-    <main className="home">
+    <main className="home container">
       <section className="hero">
         <h1 className="hero__title">
           Rent your own field, invest in farming,
@@ -30,17 +26,23 @@ export default function HomePage() {
           and grow your own vegetables
         </h1>
 
-        <Button className="hero__button">Let's start</Button>
+        <Button
+          className="hero__button"
+          onClick={() => {
+            navigate("/locations");
+          }}
+        >
+          Let's start
+        </Button>
       </section>
 
-      <section className="features">
-        {/* TODO: fix keys */}
-        {features.map((feature) => (
-          <Card key={feature.text} className="feature-card">
-            <Card.Image src={feature.image} alt={feature.text} />
+      <section className="fields">
+        {fields.slice(0, 3).map((field) => (
+          <Card key={field.id} className="field-card">
+            <Card.Image src={field.image} alt={field.title} />
 
-            <Card.Content className="feature-card__content">
-              <p>{feature.text}</p>
+            <Card.Content className="field-card__content">
+              <p>{field.title}</p>
             </Card.Content>
           </Card>
         ))}

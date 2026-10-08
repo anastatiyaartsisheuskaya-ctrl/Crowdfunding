@@ -1,0 +1,139 @@
+.login {
+  padding: 0 30px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+}
+
+.login__card {
+  margin-top: 116px;
+  width: min(100%, 420px);
+  padding: 40px;
+
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+
+  box-shadow: var(--shadow-card);
+}
+
+.login__header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.login__title {
+  margin: 0 0 10px;
+
+  color: var(--color-text);
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.login__subtitle {
+  margin: 0;
+
+  color: var(--color-text-muted);
+  font-size: 16px;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.login__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login__label {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.login__input {
+  width: 100%;
+  padding: 12px 14px;
+  box-sizing: border-box;
+
+  color: var(--color-text);
+  background-color: var(--color-background);
+
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  outline: none;
+
+  font: inherit;
+
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.login__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.login__input:focus {
+  border-color: var(--color-primary);
+
+  box-shadow: 0 0 0 3px var(--color-primary-transparent);
+}
+
+.login__button {
+  margin-top: 8px;
+  padding: 13px 20px;
+
+  color: var(--color-button-text);
+  background-color: var(--color-primary);
+
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.login__button:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.login__button:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 480px) {
+  .login {
+    padding: 20px;
+  }
+
+  .login__card {
+    padding: 28px 22px;
+  }
+
+  .login__title {
+    font-size: 28px;
+  }
+}
+
+.login--success {
+  color: var(--color-primary);
+}
+
+.login--error {
+  color: var(--color-error);
+}
