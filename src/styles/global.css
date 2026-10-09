@@ -23,3 +23,17 @@ body {
     width: 90%;
   }
 }
+
+@media screen and (max-width: 425px) {
+  .container {
+    width: 95%;
+  }
+}
+
+.truncate {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}

@@ -1,42 +1,39 @@
-import { ChevronDown, Filter } from "lucide-react";
+import { useState } from "react";
 import { useGetFieldsQuery } from "../../modules/fields/api/fieldsApi";
 import { Button } from "../../shared/components/Button/Button";
 import { Card } from "../../shared/components/Card/Card";
 import "./InvestPage.css";
-import { useParams } from "react-router";
+import { Sort } from "../../shared/components/Sort/Sort";
+import { Filter } from "../../shared/components/FIlter/Filter";
+
+const initialFilters = {
+  name: "",
+  country: "",
+  size: "",
+  guidePrice: "",
+};
+
+const initialSort = "none";
 
 export function InvestPage() {
-  const params = useParams();
-  const { data: fields = [], isLoading, isError } = useGetFieldsQuery();
+  const [sort, setSort] = useState("none");
+  const [filters, setFilters] = useState(initialFilters);
 
-  if (isLoading) {
-    return <main className="invest">Loading...</main>;
-  }
+  const {
+    data: fields = [],
+    isLoading,
+    isError,
+  } = useGetFieldsQuery({ sort, filters });
 
-  if (isError) {
-    return (
-      <main className="invest">
-        <p>Failed to load fields.</p>
-      </main>
-    );
-  }
+  if (isLoading) return <main className="invest">Loading fields...</main>;
+  if (isError) return <main className="invest">Failed to load fields.</main>;
 
   return (
     <div className="invest container">
       <div className="invest__toolbar">
-        <div className="invest__sort">
-          <span>Sort by</span>
+        <Sort current={sort} onChange={setSort} />
 
-          <button className="invest__sort-button" type="button">
-            <p className="invest__status">{params?.sort ?? "None"}</p>
-            <ChevronDown size={14} />
-          </button>
-        </div>
-
-        <Button variant="outline" className="invest__filter" type="button">
-          Filter
-          <Filter size={15} />
-        </Button>
+        <Filter current={filters} onChange={setFilters} />
       </div>
 
       <section className="invest__grid">
@@ -45,7 +42,7 @@ export function InvestPage() {
             <Card.Image src={field.image} alt={field.title} />
 
             <Card.Content className="invest-card__content">
-              <h2 className="invest-card__title">{field.title}</h2>
+              <h2 className="invest-card__title truncate">{field.title}</h2>
 
               <p className="invest-card__country">{field.location.country}</p>
 
@@ -81,7 +78,11 @@ export function InvestPage() {
                 )}
 
                 {field.actions.canReserve && (
-                  <Button variant="link" type="button">
+                  <Button
+                    variant="link"
+                    className="invest-card__invest"
+                    type="button"
+                  >
                     Reserve
                   </Button>
                 )}

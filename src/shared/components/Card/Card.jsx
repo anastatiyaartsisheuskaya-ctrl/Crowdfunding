@@ -9,7 +9,9 @@ function Card({ className = "", children, ...props }) {
 }
 
 function CardImage({ className = "", ...props }) {
-  return <img className={`card__image ${className}`} {...props} />;
+  return (
+    <img className={`card__image ${className}`} {...props} loading="lazy" />
+  );
 }
 
 function CardContent({ className = "", children, ...props }) {

@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Button } from "../../shared/components/Button/Button";
 import { Card } from "../../shared/components/Card/Card";
 import { useNavigate } from "react-router";

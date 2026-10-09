@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import "./Header.css";
 import { Menu } from "lucide-react";
 import { X } from "lucide-react";
@@ -8,15 +8,19 @@ import { useGetMeQuery } from "../../auth/api/authApi";
 export function Header() {
   const { data: user } = useGetMeQuery();
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  const layoutClass =
+    pathname === "/" ? "header__links--home" : "header__links--default";
 
   const closeMenu = () => {
     setIsOpen(false);
   };
 
   return (
-    <header className="container">
-      <nav className={`header ${isOpen ? "header--open" : ""}`}>
-        <div className="header__links">
+    <header className="header container">
+      <nav className={`header__nav ${isOpen ? "header--open" : ""}`}>
+        <div className={`header__links ${layoutClass}`}>
           <NavLink to="/" end className="header__link" onClick={closeMenu}>
             Home
           </NavLink>
@@ -44,10 +48,10 @@ export function Header() {
         >
           {isOpen ? <X /> : <Menu />}
         </button>
-        <div className="header__icon">
-          <img src={user.image} alt="User icon" />
-        </div>
       </nav>
+      <div className="header__icon">
+        <img src={user.image} alt="User icon" loading="lazy" />
+      </div>
     </header>
   );
 }
