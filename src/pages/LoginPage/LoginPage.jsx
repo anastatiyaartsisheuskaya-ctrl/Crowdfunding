@@ -1,11 +1,14 @@
 import "./LoginPage.css";
 import { useLoginMutation } from "../../modules/auth/api/authApi";
+import { setCredentials } from "../../modules/auth/model/authSlice";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [login, { isLoading, isSuccess, isError, error, data }] =
-    useLoginMutation();
+  const dispatch = useDispatch();
+
+  const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,13 +17,21 @@ export default function LoginPage() {
 
     const username = formData.get("username");
     const password = formData.get("password");
+
     try {
       const result = await login({
         username,
         password,
       }).unwrap();
-      localStorage.setItem("accessToken", result.accessToken);
-      setTimeout(() => navigate("/"), 700);
+
+      dispatch(
+        setCredentials({
+          user: result,
+          token: result.accessToken,
+        }),
+      );
+
+      navigate("/", { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -42,6 +53,8 @@ export default function LoginPage() {
               type="text"
               name="username"
               placeholder="Enter your username"
+              autoComplete="username"
+              required
             />
           </label>
 
@@ -52,13 +65,16 @@ export default function LoginPage() {
               type="password"
               name="password"
               placeholder="Enter your password"
+              autoComplete="current-password"
+              required
             />
           </label>
+
           {isLoading && <p>Logging in...</p>}
 
           {isError && (
-            <p className="login--error">
-              {error?.data?.message || "Login failed"}
+            <p className="login--error" role="alert">
+              {error?.data?.message || "Login failed. Please try again."}
             </p>
           )}
 
@@ -66,8 +82,8 @@ export default function LoginPage() {
             <p className="login--success">Successfully logged in!</p>
           )}
 
-          <button className="login__button" type="submit">
-            Log in
+          <button className="login__button" type="submit" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Log in"}
           </button>
         </form>
       </section>

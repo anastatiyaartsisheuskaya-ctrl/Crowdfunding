@@ -1,22 +1,19 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getFields } from "../service/fieldsService";
+import { getFields, getFieldDetails } from "../service/fieldsService";
 
 export const fieldsApi = createApi({
   reducerPath: "fieldsApi",
   baseQuery: fakeBaseQuery(),
-  keepUnusedDataFor: 3000,
+  keepUnusedDataFor: 300,
   tagTypes: ["Fields"],
 
   endpoints: (builder) => ({
     getFields: builder.query({
-      async queryFn(search) {
+      async queryFn(search = {}) {
         try {
-          console.log("ask", search);
           const fields = await getFields(search);
-          console.log("fields", fields);
           return { data: fields };
         } catch (error) {
-          console.log(error);
           return {
             error: {
               message: error.message,
@@ -26,7 +23,25 @@ export const fieldsApi = createApi({
       },
       providesTags: ["Fields"],
     }),
+
+    getFieldDetails: builder.query({
+      async queryFn(id) {
+        try {
+          console.log("api id", id);
+          const field = await getFieldDetails(id);
+          console.log("api field", field);
+          return { data: field };
+        } catch (error) {
+          return {
+            error: {
+              message: error.message,
+            },
+          };
+        }
+      },
+      providesTags: (_result, _error, id) => [{ type: "Fields", id }],
+    }),
   }),
 });
 
-export const { useGetFieldsQuery } = fieldsApi;
+export const { useGetFieldsQuery, useLazyGetFieldDetailsQuery } = fieldsApi;

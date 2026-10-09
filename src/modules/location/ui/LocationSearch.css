@@ -1,0 +1,29 @@
+.location__form {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.location__form__error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 6px 0 0;
+  color: var(--color-error);
+  font-size: 12px;
+}
+
+@media screen and (max-width: 620px) {
+  .location__input {
+    font-size: 12px;
+    height: 45px;
+  }
+
+  .location__search-button {
+    width: 70px;
+    height: 30px;
+  }
+}

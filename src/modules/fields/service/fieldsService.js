@@ -1,4 +1,12 @@
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+} from "firebase/firestore";
 
 import { db } from "../../../api/firebase/firebase";
 
@@ -12,16 +20,20 @@ const sortOptions = {
 export async function getFields({ sort = "none", filters = {} } = {}) {
   const constraints = [];
 
-  if (filters?.country?.trim()) {
-    constraints.push(where("location.country", "==", filters.country.trim()));
+  const country = filters.country?.trim();
+  const size = filters.size;
+  const guidePrice = filters.guidePrice;
+
+  if (country) {
+    constraints.push(where("location.country", "==", country));
   }
 
-  if (Boolean(filters?.size)) {
-    constraints.push(where("size.value", "==", Number(filters.size)));
+  if (size !== "" && size !== undefined && size !== null) {
+    constraints.push(where("size.value", "==", Number(size)));
   }
 
-  if (Boolean(filters?.guidePrice)) {
-    constraints.push(where("price.value", "==", Number(filters.guidePrice)));
+  if (guidePrice !== "" && guidePrice !== undefined && guidePrice !== null) {
+    constraints.push(where("price.value", "==", Number(guidePrice)));
   }
 
   const sortOption = sortOptions[sort];
@@ -30,24 +42,42 @@ export async function getFields({ sort = "none", filters = {} } = {}) {
     constraints.push(orderBy(sortOption[0], sortOption[1]));
   }
 
-  console.log("constraints", constraints);
-
   const fieldsQuery = query(collection(db, "fields"), ...constraints);
 
   const snapshot = await getDocs(fieldsQuery);
 
-  let fields = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
+  let fields = snapshot.docs.map((document) => ({
+    id: document.id,
+    ...document.data(),
   }));
 
-  if (filters?.name?.trim()) {
-    const searchName = filters.name.trim().toLowerCase();
+  const name = filters.name?.trim().toLowerCase();
 
+  if (name) {
     fields = fields.filter((field) =>
-      field.title.toLowerCase().includes(searchName),
+      field.title?.toLowerCase().includes(name),
     );
   }
 
   return fields;
+}
+
+export async function getFieldDetails(id) {
+  const fieldsQuery = query(
+    collection(db, "fields"),
+    where("id", "==", Number(id)),
+  );
+
+  const snapshot = await getDocs(fieldsQuery);
+
+  if (snapshot.empty) {
+    throw new Error("Field not found");
+  }
+
+  const document = snapshot.docs[0];
+
+  return {
+    ...document.data(),
+    firestoreId: document.id,
+  };
 }

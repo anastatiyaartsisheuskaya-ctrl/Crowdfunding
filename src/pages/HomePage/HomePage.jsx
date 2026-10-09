@@ -18,15 +18,13 @@ export default function HomePage() {
 
   return (
     <main className="home container">
-      <section className="hero">
-        <h1 className="hero__title">
-          Rent your own field, invest in farming,
-          <br />
-          and grow your own vegetables
+      <section className="home__hero">
+        <h1 className="home__title">
+          Rent your own field, invest in farming, and grow your own vegetables
         </h1>
 
         <Button
-          className="hero__button"
+          className="home__button"
           onClick={() => {
             navigate("/locations");
           }}

@@ -21,9 +21,7 @@ export function AppLayout() {
   return (
     <div className={`app-layout ${layoutClass}`}>
       <Header />
-      <main>
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 }
