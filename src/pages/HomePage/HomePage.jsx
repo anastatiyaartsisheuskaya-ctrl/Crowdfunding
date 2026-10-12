@@ -3,18 +3,12 @@ import { Card } from "../../shared/components/Card/Card";
 import { useNavigate } from "react-router";
 import "./HomePage.css";
 import { useGetFieldsQuery } from "../../modules/fields/api/fieldsApi";
+import { ListSkeleton } from "./ListSkeleton/ListSkeleton";
+import { ErrorMessage } from "../../shared/components/ErrorMessage/ErrorMessage";
 
 export default function HomePage() {
   const { data: fields = [], isLoading, isError } = useGetFieldsQuery();
   const navigate = useNavigate();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Failed to load fields</div>;
-  }
 
   return (
     <main className="home container">
@@ -34,15 +28,25 @@ export default function HomePage() {
       </section>
 
       <section className="fields">
-        {fields.slice(0, 3).map((field) => (
-          <Card key={field.id} className="field-card">
-            <Card.Image src={field.image} alt={field.title} />
-
-            <Card.Content className="field-card__content">
-              <p>{field.title}</p>
-            </Card.Content>
-          </Card>
-        ))}
+        {isLoading ? (
+          <ListSkeleton />
+        ) : isError ? (
+          <ErrorMessage
+            type="error"
+            message="We couldn't load the fields. Please try again later."
+          />
+        ) : fields.length > 0 ? (
+          fields.slice(0, 3).map((field) => (
+            <Card key={field.id} className="field-card">
+              <Card.Image src={field.image} alt={field.title} />
+              <Card.Content className="field-card__content">
+                <p>{field.title}</p>
+              </Card.Content>
+            </Card>
+          ))
+        ) : (
+          <ErrorMessage type="empty" message="No fields found." />
+        )}
       </section>
     </main>
   );

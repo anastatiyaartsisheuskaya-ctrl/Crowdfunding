@@ -11,52 +11,46 @@ import {
 import { db } from "../../../api/firebase";
 
 const sortOptions = {
-  "price-asc": ["price.value", "asc"],
-  "price-desc": ["price.value", "desc"],
-  "size-desc": ["size.value", "desc"],
-  "size-asc": ["size.value", "asc"],
+  "price-asc": (a, b) => a.price.value - b.price.value,
+  "price-desc": (a, b) => b.price.value - a.price.value,
+  "size-desc": (a, b) => b.size.value - a.size.value,
+  "size-asc": (a, b) => a.size.value - b.size.value,
 };
 
 export async function getFields({ sort = "none", filters = {} } = {}) {
-  const constraints = [];
-
-  const country = filters.country?.trim();
-  const size = filters.size;
-  const guidePrice = filters.guidePrice;
-
-  if (country) {
-    constraints.push(where("location.country", "==", country));
-  }
-
-  if (size !== "" && size !== undefined && size !== null) {
-    constraints.push(where("size.value", "==", Number(size)));
-  }
-
-  if (guidePrice !== "" && guidePrice !== undefined && guidePrice !== null) {
-    constraints.push(where("price.value", "==", Number(guidePrice)));
-  }
-
-  const sortOption = sortOptions[sort];
-
-  if (sortOption) {
-    constraints.push(orderBy(sortOption[0], sortOption[1]));
-  }
-
-  const fieldsQuery = query(collection(db, "fields"), ...constraints);
-
-  const snapshot = await getDocs(fieldsQuery);
+  const snapshot = await getDocs(collection(db, "fields"));
 
   let fields = snapshot.docs.map((document) => ({
-    id: document.id,
     ...document.data(),
   }));
 
-  const name = filters.name?.trim().toLowerCase();
+  const { country, size, guidePrice, name } = filters;
 
-  if (name) {
-    fields = fields.filter((field) =>
-      field.title?.toLowerCase().includes(name),
+  if (country?.trim()) {
+    fields = fields.filter(
+      (field) =>
+        field.location.country?.toLowerCase() === country.trim().toLowerCase(),
     );
+  }
+
+  if (size !== "" && size != null) {
+    fields = fields.filter((field) => field.size.value === Number(size));
+  }
+
+  if (guidePrice !== "" && guidePrice != null) {
+    fields = fields.filter((field) => field.price.value === Number(guidePrice));
+  }
+
+  if (name?.trim()) {
+    const searchName = name.trim().toLowerCase();
+
+    fields = fields.filter((field) =>
+      field.title?.toLowerCase().includes(searchName),
+    );
+  }
+
+  if (sortOptions[sort]) {
+    fields.sort(sortOptions[sort]);
   }
 
   return fields;

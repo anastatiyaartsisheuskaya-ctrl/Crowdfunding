@@ -13,6 +13,8 @@ import { MapController } from "../../modules/location";
 import { Filter } from "../../shared/components/FIlter/Filter";
 import { Card } from "../../shared/components/Card/Card";
 import { useMediaQuery } from "../../shared/hooks/useMediaQuery";
+import { LocationPageSkeleton } from "./LocationPageSkeleton/LocationPageSkeleton";
+import { ErrorMessage } from "../../shared/components/ErrorMessage/ErrorMessage";
 
 export function LocationPage() {
   const [mapLocation, setMapLocation] = useState(null);
@@ -33,7 +35,7 @@ export function LocationPage() {
     isLoading,
     isError: getError,
   } = useGetFieldsQuery({ sort: "none", filters });
-  const [getFieldDetails, { data: selectedField, isFetching, isError, error }] =
+  const [getFieldDetails, { data: selectedField }] =
     useLazyGetFieldDetailsQuery();
 
   const handleSelectField = (id) => {
@@ -42,8 +44,24 @@ export function LocationPage() {
   };
 
   const drawData = selectedField && select ? [selectedField] : fields;
-  // TODO fix
-  if (isLoading || getError) return <p>Wait</p>;
+
+  if (isLoading) {
+    return <LocationPageSkeleton />;
+  }
+
+  if (getError) {
+    return (
+      <main className="location container">
+        <section className="location__search">
+          <h1 className="location__title">Locations</h1>
+          <ErrorMessage
+            type="error"
+            message="We couldn't load the fields. Please try again later."
+          />
+        </section>
+      </main>
+    );
+  }
   return (
     <main className="location container">
       <section className="location__search">
@@ -78,6 +96,9 @@ export function LocationPage() {
             <Filter current={filters} onChange={setFilters} />
           </div>
           <div className="location__field-list">
+            {drawData.length === 0 && (
+              <ErrorMessage type="empty" message="No fields found." />
+            )}
             {drawData.map((field) => (
               <Card key={field.id} className="location__field-card">
                 <Card.Image src={field.image} alt={field.title} />
@@ -87,8 +108,12 @@ export function LocationPage() {
                       <h2 className="location__card-title">{field.title}</h2>
                       <p>{field.location.country}</p>
                     </div>
-                    <Button variant="outline" className="location__shop-btn">
-                      Shop
+                    <Button
+                      variant="outline"
+                      className="location__shop-btn"
+                      onClick={() => handleSelectField(field.id)}
+                    >
+                      Show
                     </Button>
                   </div>
                 </Card.Content>
@@ -104,18 +129,18 @@ export function LocationPage() {
             scrollWheelZoom={false}
             style={{ height: "500px", width: "100%" }}
           >
-            <MapController location={mapLocation} />
+            <MapController selectedField={selectedField} />
 
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {fields.map((field) => (
+            {drawData.map((field) => (
               <FieldMarker
                 key={field.id}
                 field={field}
-                onSelect={handleSelectField}
+                onSelect={() => handleSelectField(field.id)}
               >
                 <Popup>{field.title}</Popup>
               </FieldMarker>

@@ -7,6 +7,11 @@
   gap: 12px;
 }
 
+.location__input {
+  font-size: 12px;
+  height: 60px;
+}
+
 .location__form__error {
   position: absolute;
   top: 100%;

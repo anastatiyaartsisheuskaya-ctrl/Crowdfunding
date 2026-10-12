@@ -1,14 +1,18 @@
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 
-export function MapController({ location }) {
+export function MapController({ selectedField }) {
   const map = useMap();
 
   useEffect(() => {
-    if (!location) return;
+    if (!selectedField) return;
 
-    map.flyTo([location.latitude, location.longitude], 10, { duration: 1.2 });
-  }, [location, map]);
+    const { latitude, longitude } = selectedField.location;
+
+    map.flyTo([latitude, longitude], 12, {
+      duration: 1.2,
+    });
+  }, [selectedField, map]);
 
   return null;
 }

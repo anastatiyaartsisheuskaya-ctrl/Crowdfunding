@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
-import { Input } from "../../../shared/components/Input/Input";
-import { Button } from "../../../shared/components/Button/Button";
+import { Input } from "../../../../shared/components/Input/Input";
+import { Button } from "../../../../shared/components/Button/Button";
 import "./LocationSearch.css";
 
 export function LocationSearch({ onLocationFound }) {

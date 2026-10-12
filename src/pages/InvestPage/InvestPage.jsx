@@ -5,6 +5,8 @@ import { Card } from "../../shared/components/Card/Card";
 import "./InvestPage.css";
 import { Sort } from "../../shared/components/Sort/Sort";
 import { Filter } from "../../shared/components/FIlter/Filter";
+import { ErrorMessage } from "../../shared/components/ErrorMessage/ErrorMessage";
+import { InvestPageSkeleton } from "./InvestPageSkeleton/InvestPageSkeleton";
 
 const initialFilters = {
   name: "",
@@ -12,8 +14,6 @@ const initialFilters = {
   size: "",
   guidePrice: "",
 };
-
-const initialSort = "none";
 
 export function InvestPage() {
   const [sort, setSort] = useState("none");
@@ -25,24 +25,37 @@ export function InvestPage() {
     isError,
   } = useGetFieldsQuery({ sort, filters });
 
-  if (isLoading) return <main className="invest">Loading fields...</main>;
-  if (isError) return <main className="invest">Failed to load fields.</main>;
+  if (isLoading) return <InvestPageSkeleton />;
+  if (isError)
+    return (
+      <main className="invest container">
+        <ErrorMessage
+          type="error"
+          message="We couldn't load the fields. Please try again later."
+        />
+      </main>
+    );
 
   return (
-    <div className="invest container">
+    <main className="invest container">
       <div className="invest__toolbar">
         <Sort current={sort} onChange={setSort} />
 
         <Filter current={filters} onChange={setFilters} />
       </div>
 
+      {fields.length === 0 && (
+        <ErrorMessage type="empty" message="No fields found." />
+      )}
       <section className="invest__grid">
         {fields.map((field) => (
           <Card className="invest-card" key={field.id}>
             <Card.Image src={field.image} alt={field.title} />
 
             <Card.Content className="invest-card__content">
-              <h2 className="invest-card__title truncate">{field.title}</h2>
+              <div className="invest-card__title-wrapper">
+                <h2 className="invest-card__title">{field.title}</h2>
+              </div>
 
               <p className="invest-card__country">{field.location.country}</p>
 
@@ -91,6 +104,6 @@ export function InvestPage() {
           </Card>
         ))}
       </section>
-    </div>
+    </main>
   );
 }

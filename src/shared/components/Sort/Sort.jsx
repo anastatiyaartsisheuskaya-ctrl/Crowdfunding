@@ -2,10 +2,10 @@ import "./Sort.css";
 
 const SORT_OPTIONS = [
   { value: "none", label: "None" },
-  { value: "price-asc", label: "Guide price: cheapest first" },
-  { value: "price-desc", label: "Guide price: most expensive first" },
-  { value: "size-desc", label: "Size: biggest first" },
-  { value: "size-asc", label: "Size: smallest first" },
+  { value: "price-asc", label: "Cheapest" },
+  { value: "price-desc", label: "Expensive" },
+  { value: "size-desc", label: "Biggest" },
+  { value: "size-asc", label: "Smallest" },
 ];
 
 export function Sort({ current, onChange }) {
