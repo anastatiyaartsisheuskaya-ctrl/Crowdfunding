@@ -5,9 +5,9 @@ export const authApi = createApi({
 
   baseQuery: fetchBaseQuery({
     baseUrl: "https://dummyjson.com",
-    credentials: "include",
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
+
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.token;
 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
@@ -25,9 +25,12 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+
     getMe: builder.query({
-      query: () => "/auth/me",
-      method: "GET",
+      query: () => ({
+        url: "/auth/me",
+        method: "GET",
+      }),
     }),
   }),
 });

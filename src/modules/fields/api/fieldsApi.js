@@ -27,9 +27,7 @@ export const fieldsApi = createApi({
     getFieldDetails: builder.query({
       async queryFn(id) {
         try {
-          console.log("api id", id);
           const field = await getFieldDetails(id);
-          console.log("api field", field);
           return { data: field };
         } catch (error) {
           return {

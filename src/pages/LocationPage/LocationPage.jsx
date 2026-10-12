@@ -1,17 +1,15 @@
 import { useState } from "react";
-import { Input } from "../../shared/components/Input/Input";
-import { Search } from "lucide-react";
 import { Button } from "../../shared/components/Button/Button";
 import "./LocationPage.css";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Popup } from "react-leaflet";
-import { FieldMarker } from "../../shared/components/Marker/FieldMarker";
+import { FieldMarker } from "../../shared/components/FIeldMarker/FieldMarker";
 import {
   useGetFieldsQuery,
   useLazyGetFieldDetailsQuery,
 } from "../../modules/fields/api/fieldsApi";
-import { LocationSearch } from "../../modules/location/ui/LocationSearch";
-import { MapController } from "../../modules/location/halper/MapController";
+import { LocationSearch } from "../../modules/location";
+import { MapController } from "../../modules/location";
 import { Filter } from "../../shared/components/FIlter/Filter";
 import { Card } from "../../shared/components/Card/Card";
 import { useMediaQuery } from "../../shared/hooks/useMediaQuery";

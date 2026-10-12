@@ -1,10 +1,10 @@
 import "./LoginPage.css";
-import { useLoginMutation } from "../../modules/auth/api/authApi";
+import { authApi, useLoginMutation } from "../../modules/auth/api/authApi";
 import { setCredentials } from "../../modules/auth/model/authSlice";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 
-export default function LoginPage() {
+export function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -19,17 +19,23 @@ export default function LoginPage() {
     const password = formData.get("password");
 
     try {
-      const result = await login({
+      const user = await login({
         username,
         password,
       }).unwrap();
 
+      const token = user.accessToken;
+
+      localStorage.setItem("token", token);
+
       dispatch(
         setCredentials({
-          user: result,
-          token: result.accessToken,
+          user,
+          token,
         }),
       );
+
+      dispatch(authApi.util.resetApiState());
 
       navigate("/", { replace: true });
     } catch (error) {

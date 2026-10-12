@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router";
 import "./Header.css";
 import { Menu } from "lucide-react";
 import { X } from "lucide-react";
-import { useGetMeQuery } from "../../auth/api/authApi";
+import { useGetMeQuery } from "../../../auth/api/authApi";
 
 export function Header() {
   const { data: user } = useGetMeQuery();

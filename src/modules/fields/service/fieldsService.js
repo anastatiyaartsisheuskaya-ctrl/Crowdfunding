@@ -8,7 +8,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-import { db } from "../../../api/firebase/firebase";
+import { db } from "../../../api/firebase";
 
 const sortOptions = {
   "price-asc": ["price.value", "asc"],
