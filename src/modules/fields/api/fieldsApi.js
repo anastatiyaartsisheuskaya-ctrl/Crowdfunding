@@ -4,7 +4,7 @@ import { getFields, getFieldDetails } from "../service/fieldsService";
 export const fieldsApi = createApi({
   reducerPath: "fieldsApi",
   baseQuery: fakeBaseQuery(),
-  keepUnusedDataFor: 300,
+  keepUnusedDataFor: 1800,
   tagTypes: ["Fields"],
 
   endpoints: (builder) => ({
