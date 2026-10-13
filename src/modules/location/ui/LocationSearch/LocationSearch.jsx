@@ -66,7 +66,7 @@ export function LocationSearch({ onLocationFound }) {
             className="location__search-button"
             disabled={isSearching}
           >
-            {isSearching ? "Searching..." : "Search"}
+            Search
           </Button>
         }
         className="location__input"
