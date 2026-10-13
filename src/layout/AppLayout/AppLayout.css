@@ -2,11 +2,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 130px;
-}
-
-main {
-  flex: 1;
 }
 
 .app-layout--home {

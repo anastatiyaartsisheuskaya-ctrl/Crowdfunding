@@ -3,11 +3,13 @@ import { NavLink, useLocation } from "react-router";
 import "./Header.css";
 import { Menu } from "lucide-react";
 import { X } from "lucide-react";
-import { useGetMeQuery } from "../../../auth/api/authApi";
+import { useGetMeQuery } from "../../modules/auth/api/authApi";
+import { UserMenu } from "../../modules/user";
 
 export function Header() {
   const { data: user } = useGetMeQuery();
   const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
 
   const layoutClass =
@@ -49,8 +51,20 @@ export function Header() {
           {isOpen ? <X /> : <Menu />}
         </button>
       </nav>
-      <div className="header__icon">
-        <img src={user.image} alt="User icon" loading="lazy" />
+      <div className="header__profile">
+        <div
+          className="header__icon"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+        >
+          <img src={user.image} alt="User icon" loading="lazy" />
+        </div>
+        {isMenuOpen && (
+          <UserMenu
+            user={user}
+            isOpen={isMenuOpen}
+            onClose={() => setIsMenuOpen(false)}
+          />
+        )}
       </div>
     </header>
   );

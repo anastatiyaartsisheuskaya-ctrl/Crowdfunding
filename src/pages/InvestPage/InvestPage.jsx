@@ -6,7 +6,8 @@ import "./InvestPage.css";
 import { Sort } from "../../shared/components/Sort/Sort";
 import { Filter } from "../../shared/components/FIlter/Filter";
 import { ErrorMessage } from "../../shared/components/ErrorMessage/ErrorMessage";
-import { InvestPageSkeleton } from "./InvestPageSkeleton/InvestPageSkeleton";
+import InvestPageSkeleton from "./InvestPageSkeleton/InvestPageSkeleton";
+import { useDebounce } from "../../shared/hooks/useDebounce";
 
 const initialFilters = {
   name: "",
@@ -15,15 +16,25 @@ const initialFilters = {
   guidePrice: "",
 };
 
-export function InvestPage() {
+const SORT_OPTIONS = [
+  { value: "none", label: "None" },
+  { value: "price-asc", label: "Cheapest" },
+  { value: "price-desc", label: "Expensive" },
+  { value: "size-desc", label: "Biggest" },
+  { value: "size-asc", label: "Smallest" },
+];
+
+export default function InvestPage() {
   const [sort, setSort] = useState("none");
   const [filters, setFilters] = useState(initialFilters);
+
+  const debouncedFilters = useDebounce(filters, 300);
 
   const {
     data: fields = [],
     isLoading,
     isError,
-  } = useGetFieldsQuery({ sort, filters });
+  } = useGetFieldsQuery({ sort, filters: debouncedFilters });
 
   if (isLoading) return <InvestPageSkeleton />;
   if (isError)
@@ -39,7 +50,7 @@ export function InvestPage() {
   return (
     <main className="invest container">
       <div className="invest__toolbar">
-        <Sort current={sort} onChange={setSort} />
+        <Sort value={sort} options={SORT_OPTIONS} onChange={setSort} />
 
         <Filter current={filters} onChange={setFilters} />
       </div>

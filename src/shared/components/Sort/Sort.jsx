@@ -1,32 +1,70 @@
+import { useCallback, useRef, useState } from "react";
+import { Check, ChevronDown } from "lucide-react";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import "./Sort.css";
 
-const SORT_OPTIONS = [
-  { value: "none", label: "None" },
-  { value: "price-asc", label: "Cheapest" },
-  { value: "price-desc", label: "Expensive" },
-  { value: "size-desc", label: "Biggest" },
-  { value: "size-asc", label: "Smallest" },
-];
+export function Sort({ value, options, onChange, label = "Sort by" }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const sortRef = useRef(null);
 
-export function Sort({ current, onChange }) {
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  useClickOutside(sortRef, closeMenu, isOpen);
+
+  const selectedOption = options.find((option) => option.value === value);
+
+  function handleSelect(optionValue) {
+    onChange(optionValue);
+    setIsOpen(false);
+  }
+
   return (
-    <div className="sort">
-      <label className="sort__label" htmlFor="field-sort">
-        Sort by
-      </label>
+    <div className="sort" ref={sortRef}>
+      <span className="sort__label">{label}</span>
 
-      <select
-        id="field-sort"
-        className="sort__select"
-        value={current}
-        onChange={(event) => onChange(event.target.value)}
+      <button
+        type="button"
+        className="sort__trigger"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((open) => !open)}
       >
-        {SORT_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+        <span className="sort__selected">
+          {selectedOption?.label ?? "Select"}
+        </span>
+
+        <ChevronDown
+          size={16}
+          className={`sort__chevron ${isOpen ? "sort__chevron--open" : ""}`}
+          aria-hidden="true"
+        />
+      </button>
+
+      {isOpen && (
+        <div className="sort__panel" role="listbox" aria-label={label}>
+          {options.map((option) => {
+            const isSelected = option.value === value;
+
+            return (
+              <button
+                key={option.value}
+                type="button"
+                role="option"
+                aria-selected={isSelected}
+                className={`sort__option ${
+                  isSelected ? "sort__option--selected" : ""
+                }`}
+                onClick={() => handleSelect(option.value)}
+              >
+                <span>{option.label}</span>
+                {isSelected && <Check size={16} aria-hidden="true" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

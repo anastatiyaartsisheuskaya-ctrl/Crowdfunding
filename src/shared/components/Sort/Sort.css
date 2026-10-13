@@ -1,4 +1,5 @@
 .sort {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -11,30 +12,123 @@
   font-size: 16px;
 }
 
-.sort__select {
-  max-width: 128px;
+.sort__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  width: 160px;
+  min-width: 0;
   height: 44px;
-  padding: 6px 24px 6px 8px;
-  border: none;
+  padding: 0 12px;
+
+  border: 1px solid var(--color-border-dark);
   border-radius: var(--radius-md);
   background: var(--color-background);
   color: var(--color-text);
   font: inherit;
-  font-size: 16px;
+  font-size: 14px;
+  text-align: left;
   cursor: pointer;
+
+  transition: border-color 0.2s ease;
+}
+
+.sort__trigger:hover,
+.sort__trigger[aria-expanded="true"] {
+  border-color: var(--color-primary);
+}
+
+.sort__selected {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sort__chevron {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.sort__chevron--open {
+  transform: rotate(180deg);
+}
+
+.sort__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+
+  display: grid;
+  gap: 4px;
+  width: 200px;
+  padding: 6px;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-background);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
+}
+
+.sort__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+
+  transition: background-color 0.15s ease;
+}
+
+.sort__option:hover {
+  background: var(--color-background-accent);
+}
+
+.sort__option--selected {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.sort__option:focus-visible,
+.sort__trigger:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 @media screen and (max-width: 335px) {
   .sort {
-    gap: 2px;
+    gap: 4px;
   }
+
   .sort__label {
-    white-space: nowrap;
     font-size: 12px;
   }
-  .sort__select {
-    max-width: 100px;
-    padding: 6px 6px 6px 8px;
+
+  .sort__trigger {
+    width: 120px;
+    padding: 0 6px 0 8px;
+    font-size: 12px;
+  }
+
+  .sort__panel {
+    width: 170px;
+  }
+
+  .sort__option {
     font-size: 12px;
   }
 }

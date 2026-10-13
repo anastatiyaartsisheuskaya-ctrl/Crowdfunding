@@ -38,4 +38,8 @@ module.exports = {
     hot: true,
     historyApiFallback: true,
   },
+
+  dotenv: {
+    prefix: "APP_",
+  },
 };

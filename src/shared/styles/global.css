@@ -18,6 +18,10 @@ body {
   margin: 0 auto;
 }
 
+main {
+  padding-bottom: 100px;
+}
+
 @media screen and (max-width: 1780px) {
   .container {
     width: 90%;

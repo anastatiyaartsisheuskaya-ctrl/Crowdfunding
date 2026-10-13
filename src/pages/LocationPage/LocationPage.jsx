@@ -15,8 +15,9 @@ import { Card } from "../../shared/components/Card/Card";
 import { useMediaQuery } from "../../shared/hooks/useMediaQuery";
 import { LocationPageSkeleton } from "./LocationPageSkeleton/LocationPageSkeleton";
 import { ErrorMessage } from "../../shared/components/ErrorMessage/ErrorMessage";
+import { useDebounce } from "../../shared/hooks/useDebounce";
 
-export function LocationPage() {
+export default function LocationPage() {
   const [mapLocation, setMapLocation] = useState(null);
   const [select, setSelect] = useState(false);
   const [mode, setMode] = useState("map");
@@ -30,17 +31,21 @@ export function LocationPage() {
     guidePrice: "",
   });
 
+  const debouncedFilters = useDebounce(filters, 300);
+
   const {
     data: fields = [],
     isLoading,
     isError: getError,
-  } = useGetFieldsQuery({ sort: "none", filters });
+  } = useGetFieldsQuery({ sort: "none", filters: debouncedFilters });
+
   const [getFieldDetails, { data: selectedField }] =
     useLazyGetFieldDetailsQuery();
 
-  const handleSelectField = (id) => {
-    getFieldDetails(id);
+  const handleSelectField = async (id) => {
+    const fieldLocation = await getFieldDetails(id);
     setSelect(true);
+    setMapLocation(fieldLocation.data.location);
   };
 
   const drawData = selectedField && select ? [selectedField] : fields;
@@ -129,7 +134,10 @@ export function LocationPage() {
             scrollWheelZoom={false}
             style={{ height: "500px", width: "100%" }}
           >
-            <MapController selectedField={selectedField} />
+            <MapController
+              location={mapLocation}
+              selectedField={selectedField}
+            />
 
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

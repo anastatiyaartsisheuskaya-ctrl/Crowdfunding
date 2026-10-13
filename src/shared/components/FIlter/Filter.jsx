@@ -1,10 +1,19 @@
+import { useRef, useCallback } from "react";
 import { useState } from "react";
 import { Filter as FilterIcon } from "lucide-react";
 import { Button } from "../Button/Button";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import "./Filter.css";
 
 export function Filter({ current, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
+  const filterRef = useRef(null);
+
+  const closeFilter = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  useClickOutside(filterRef, closeFilter, isOpen);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -25,7 +34,7 @@ export function Filter({ current, onChange }) {
   }
 
   return (
-    <div className="filter">
+    <div className="filter" ref={filterRef}>
       <Button
         type="button"
         variant="outline"

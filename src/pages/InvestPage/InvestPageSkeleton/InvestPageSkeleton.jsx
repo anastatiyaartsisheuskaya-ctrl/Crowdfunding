@@ -3,7 +3,7 @@ import "./InvestPageSkeleton.css";
 
 const SKELETON_CARDS = Array.from({ length: 6 });
 
-export function InvestPageSkeleton() {
+export default function InvestPageSkeleton() {
   return (
     <main className="invest container invest-skeleton">
       <div className="invest__toolbar">
