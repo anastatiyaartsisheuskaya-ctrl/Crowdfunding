@@ -95,15 +95,14 @@ The application follows a modular architecture, separating features, shared UI c
 
 ```text
 src/
-├── app/          # Application setup, routing, and layouts
+├── app/          # Application setup, routing and store
+├── layout/       # Layout-based elements
 ├── modules/      # Feature modules, including authentication and fields
 ├── pages/        # Page-level components
 ├── shared/       # Reusable UI components and shared utilities
 └── api/          # Shared API configuration, if applicable
 ```
 
-The exact folder structure may vary depending on the current implementation.
+## Deploy
 
-## Notes
-
-This project is intended as a frontend demonstration of a farming fields crowdfunding platform. Authentication and field data are provided by external services rather than a custom backend.
+https://crowdfunding-sigma-jet.vercel.app
