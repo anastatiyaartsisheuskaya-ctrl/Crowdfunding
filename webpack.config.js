@@ -31,17 +31,15 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
-    new webpack.DefinePlugin({
-      "process.env.API_URL": JSON.stringify(
-        process.env.APP_API_BASE_URL,
-        process.env.APP_API_KEY,
-        process.env.APP_AUTH_DOMAIN,
-        process.env.APP_PROJECT_ID,
-        process.env.APP_STORAGE_BUCKET,
-        process.env.APP_MESSAGING_SENDER_ID,
-        process.env.APP_ID,
-      ),
-    }),
+    new webpack.EnvironmentPlugin([
+      "APP_API_BASE_URL",
+      "APP_API_KEY",
+      "APP_AUTH_DOMAIN",
+      "APP_PROJECT_ID",
+      "APP_STORAGE_BUCKET",
+      "APP_MESSAGING_SENDER_ID",
+      "APP_ID",
+    ]),
   ],
 
   devServer: {
@@ -49,9 +47,5 @@ module.exports = {
     open: true,
     hot: true,
     historyApiFallback: true,
-  },
-
-  dotenv: {
-    prefix: "APP_",
   },
 };
