@@ -1,27 +1,27 @@
-# Crowdfunding — Farming Fields Platform
+# Crowdfunding – Farming Fields Platform
 
 A React-based crowdfunding application for exploring farming fields, viewing their details on an interactive map, and accessing investment-related features.
 
 ## Features
 
-- **Fields Overview** — Browse available farming fields displayed as cards with information about their location, size, price, and availability.
-- **Interactive Map** — Explore fields on a map using custom markers and geographic coordinates.
-- **Authentication** — Log in using username and password with API-based authentication.
-- **Protected Routes** — Restrict access to selected pages to authenticated users.
-- **Responsive Layout** — Adapt the interface to different screen sizes.
-- **Loading and Error States** — Display skeleton loaders, validation messages, and error feedback when needed.
+- **Fields Overview** – Browse available farming fields displayed as cards with information about their location, size, price, and availability.
+- **Interactive Map** – Explore fields on a map using custom markers and geographic coordinates.
+- **Authentication** – Log in using username and password with API-based authentication.
+- **Protected Routes** – Restrict access to selected pages to authenticated users.
+- **Responsive Layout** – Adapt the interface to different screen sizes.
+- **Loading and Error States** – Display skeleton loaders, validation messages, and error feedback when needed.
 
 ## Tech Stack
 
-- **React** — Build the user interface with reusable components.
-- **React Router** — Handle client-side routing and navigation.
-- **Redux Toolkit** — Manage application state.
-- **RTK Query** — Handle API requests, caching, and loading states.
-- **Firebase Firestore** — Store and retrieve farming field data.
-- **DummyJSON Auth API** — Provide authentication functionality.
-- **CSS** — Style components and implement responsive layouts.
-- **Webpack** — Bundle the application and run the development server.
-- **Babel** — Transpile modern JavaScript and JSX.
+- **React** – Build the user interface with reusable components.
+- **React Router** – Handle client-side routing and navigation.
+- **Redux Toolkit** – Manage application state.
+- **RTK Query** – Handle API requests, caching, and loading states.
+- **Firebase Firestore** – Store and retrieve farming field data.
+- **DummyJSON Auth API** – Provide authentication functionality.
+- **CSS** – Style components and implement responsive layouts.
+- **Webpack** – Bundle the application and run the development server.
+- **Babel** – Transpile modern JavaScript and JSX.
 
 ## Dependencies
 
@@ -96,10 +96,10 @@ The application follows a modular architecture, separating features, shared UI c
 ```text
 src/
 ├── app/          # Application setup, routing and store
-├── layout/       # Layout-based elements
 ├── modules/      # Feature modules, including authentication and fields
 ├── pages/        # Page-level components
 ├── shared/       # Reusable UI components and shared utilities
+├── styles/       # Global styles for the app
 └── api/          # Shared API configuration, if applicable
 ```
 

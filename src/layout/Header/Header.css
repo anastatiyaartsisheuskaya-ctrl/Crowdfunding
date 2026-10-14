@@ -1,8 +1,13 @@
 .header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: inherit;
   display: flex;
   justify-content: right;
   align-items: center;
   gap: 40px;
+  z-index: 500;
 
   padding: 35px 0;
 }
