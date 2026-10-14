@@ -96,6 +96,7 @@ The application follows a modular architecture, separating features, shared UI c
 ```text
 src/
 ├── app/          # Application setup, routing and store
+├── layout/       # Layout-based elements
 ├── modules/      # Feature modules, including authentication and fields
 ├── pages/        # Page-level components
 ├── shared/       # Reusable UI components and shared utilities
