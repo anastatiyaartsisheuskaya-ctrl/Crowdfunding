@@ -16,6 +16,7 @@ import { useMediaQuery } from "../../shared/hooks/useMediaQuery";
 import { LocationPageSkeleton } from "./LocationPageSkeleton/LocationPageSkeleton";
 import { ErrorMessage } from "../../shared/components/ErrorMessage/ErrorMessage";
 import { useDebounce } from "../../shared/hooks/useDebounce";
+import { Loading } from "../../shared/components/Loading/Loading";
 
 export default function LocationPage() {
   const [mapLocation, setMapLocation] = useState(null);
@@ -39,7 +40,7 @@ export default function LocationPage() {
     isError: getError,
   } = useGetFieldsQuery({ sort: "none", filters: debouncedFilters });
 
-  const [getFieldDetails, { data: selectedField }] =
+  const [getFieldDetails, { data: selectedField, isFetching }] =
     useLazyGetFieldDetailsQuery();
 
   const handleSelectField = async (id) => {
@@ -73,6 +74,21 @@ export default function LocationPage() {
         <h1 className="location__title">Locations</h1>
         <LocationSearch onLocationFound={setMapLocation} />
       </section>
+      <div className="location__toolbar">
+        <div>
+          {select && (
+            <Button variant="ghost" onClick={() => setSelect(false)}>
+              Reset
+            </Button>
+          )}
+        </div>
+        <Filter
+          current={filters}
+          onChange={setFilters}
+          className="location__filter"
+        />
+      </div>
+
       {isTablet && (
         <div className="location__switch">
           <Button variant="link" onClick={() => setMode("list")}>
@@ -86,44 +102,37 @@ export default function LocationPage() {
 
       <section className="location__map-section">
         <div
-          className="location__field-list"
           data-hidden={isTablet && mode !== "list"}
+          className="location__field-list-block"
         >
-          <div className="location__toolbar">
-            <div>
-              {select && (
-                <Button variant="ghost" onClick={() => setSelect(false)}>
-                  Reset
-                </Button>
-              )}
-            </div>
-
-            <Filter current={filters} onChange={setFilters} />
-          </div>
           <div className="location__field-list">
             {drawData.length === 0 && (
               <ErrorMessage type="empty" message="No fields found." />
             )}
-            {drawData.map((field) => (
-              <Card key={field.id} className="location__field-card">
-                <Card.Image src={field.image} alt={field.title} />
-                <Card.Content>
-                  <div className="location__card-content">
-                    <div className="location__card-text">
-                      <h2 className="location__card-title">{field.title}</h2>
-                      <p>{field.location.country}</p>
+            {isFetching ? (
+              <Loading />
+            ) : (
+              drawData.map((field) => (
+                <Card key={field.id} className="location__field-card">
+                  <Card.Image src={field.image} alt={field.title} />
+                  <Card.Content>
+                    <div className="location__card-content">
+                      <div className="location__card-text">
+                        <h2 className="location__card-title">{field.title}</h2>
+                        <p>{field.location.country}</p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="location__shop-btn"
+                        onClick={() => handleSelectField(field.id)}
+                      >
+                        Show
+                      </Button>
                     </div>
-                    <Button
-                      variant="outline"
-                      className="location__shop-btn"
-                      onClick={() => handleSelectField(field.id)}
-                    >
-                      Show
-                    </Button>
-                  </div>
-                </Card.Content>
-              </Card>
-            ))}
+                  </Card.Content>
+                </Card>
+              ))
+            )}
           </div>
         </div>
 

@@ -46,9 +46,12 @@
 }
 
 .location__toolbar {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  justify-self: right;
+  margin-bottom: 15px;
 }
 
 .location__field-list {
@@ -126,6 +129,6 @@
 }
 
 .location__map[data-hidden="true"],
-.location__field-list[data-hidden="true"] {
+.location__field-list-block[data-hidden="true"] {
   display: none;
 }
