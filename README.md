@@ -107,3 +107,8 @@ src/
 ## Deploy
 
 https://crowdfunding-sigma-jet.vercel.app
+
+## Mock authorization data:
+
+username: jamesd
+password: jamesdpass
